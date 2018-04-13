@@ -1,0 +1,20 @@
+
+#commands :
+
+service postgresql start
+
+armitage 
+
+#once in metasploit 
+scan for target hosts Hosts -> Nmap Scan -> Quick Scan (OS detect) 
+
+#generating payload
+in drop down
+payloads -> windows -> meterpreter-> reverse_tcp 
+LPORT 4444
+Output: exe 
+
+#to listen 
+Armitage -> Listeners -> Reverse
+port 4444
+type Meterpreter 

