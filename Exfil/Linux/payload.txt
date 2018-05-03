@@ -1,6 +1,10 @@
 #!/bin/bash
 #
-# Grabs pdfs and other specified files from linux system 
+# Title:         Linux Grabber
+# Author:        am3ience
+# Version:       1.0
+#
+# grabs specified files and folders on the user's directory and copies them to the bunny loot folder
 #
 #
 
